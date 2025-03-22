@@ -10,6 +10,9 @@ public class Main{
     {
      HttpURLConnection connection = null;
         //Method1-->java.net.HttpURLconnection
+        BufferedReader reader;
+        String line;
+        StringBuffer responseContent = new StringBuffer();
         try {
             URL url = new URL("https://jsonplaceholder.typicode.com/albums");  
             connection = (HttpURLConnection) url.openConnection();
@@ -20,6 +23,11 @@ public class Main{
 
             int status = connection.getResponseCode();
             System.out.println("Response Code:"+status);
+            if(status > 200)
+            {
+             reader = new BufferedReader(new InputStreamReader(connection.getErrorStream()));
+             while(line =)
+            }
         } catch (MalformedURLException e) {
            e.printStackTrace(); 
         }catch (IOException e){
