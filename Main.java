@@ -26,8 +26,18 @@ public class Main{
             if(status > 200)
             {
              reader = new BufferedReader(new InputStreamReader(connection.getErrorStream()));
-             while(line =)
+             while((line =reader.readLine()) != null)
+             {
+                responseContent.append(line);
+             }reader.close();
             }
+            else{
+                reader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+                while((line = reader.readLine()) != null)
+                {
+                    responseContent.append(line);
+                }reader.close();
+            }System.out.println(responseContent.toString());
         } catch (MalformedURLException e) {
            e.printStackTrace(); 
         }catch (IOException e){
