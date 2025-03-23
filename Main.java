@@ -4,13 +4,16 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
-import java.net.URL;
+import java.net.URI;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
 public class Main{
     public static void main(String[] args)
     {
-     HttpURLConnection connection = null;
+    // HttpURLConnection connection = null;
         //Method1-->java.net.HttpURLconnection
-        BufferedReader reader;
+       /* * BufferedReader reader;
         String line;
         StringBuffer responseContent = new StringBuffer();
         try {
@@ -42,8 +45,17 @@ public class Main{
            e.printStackTrace(); 
         }catch (IOException e){
             e.printStackTrace();
-        }
+        }finally{
+            connection.disconnect()
+        }*/
         
-
-    }
+//Method 2:java.net.http.HttpClient
+HttpClient client = HttpClient.newHttpClient();
+HttpRequest request = HttpRequest.newBuilder().uri(URI.create("https://jsonplaceholder.typicode.com/albums")).build();
+client.sendAsync(request, HttpResponse.BodyHandlers.ofString())
+.thenApply(HttpResponse::body)
+.thenAccept(System.out::println)
+.join();
+    
+}
 }
