@@ -51,15 +51,23 @@ public class Main{
         }*/
         
 //Method 2:java.net.http.HttpClient
+//Creating Http client
 HttpClient client = HttpClient.newHttpClient();
+//Creating Http request
 HttpRequest request = HttpRequest.newBuilder().uri(URI.create("https://jsonplaceholder.typicode.com/albums")).build();
+//Creating asynchronous request
 client.sendAsync(request, HttpResponse.BodyHandlers.ofString())
 .thenApply(HttpResponse::body)
 .thenApply(Main::parse)
+.exceptionally(e -> {
+    System.out.println("Error:"+e.getMessage());
+    return null;
+})
 .join();
     
 }
 public static String parse(String responseBody){
+    try{
     JSONArray albums = new JSONArray(responseBody);
     StringBuilder result = new StringBuilder();
     for(int i=0;i < albums.length();i++)
@@ -73,5 +81,9 @@ public static String parse(String responseBody){
         result.append(albuminfo).append("\n");
     }
     return result.toString();
+}catch(Exception e)
+{
+    System.out.println("Parsing Error:"+e.getMessage());
+    return null;
 }
 }
