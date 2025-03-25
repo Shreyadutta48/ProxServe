@@ -8,12 +8,13 @@ import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
+import org.json.JSONArray;
+import org.json.JSONObject;
 public class Main{
-    public static void main(String[] args)
-    {
-    // HttpURLConnection connection = null;
+    public static void main(String[] args){
+ //HttpURLConnection connection = null;
         //Method1-->java.net.HttpURLconnection
-       /* * BufferedReader reader;
+      /** BufferedReader reader;
         String line;
         StringBuffer responseContent = new StringBuffer();
         try {
@@ -40,7 +41,7 @@ public class Main{
                 {
                     responseContent.append(line);
                 }reader.close();
-            }System.out.println(responseContent.toString());
+            }//System.out.println(responseContent.toString());
         } catch (MalformedURLException e) {
            e.printStackTrace(); 
         }catch (IOException e){
@@ -54,8 +55,23 @@ HttpClient client = HttpClient.newHttpClient();
 HttpRequest request = HttpRequest.newBuilder().uri(URI.create("https://jsonplaceholder.typicode.com/albums")).build();
 client.sendAsync(request, HttpResponse.BodyHandlers.ofString())
 .thenApply(HttpResponse::body)
-.thenAccept(System.out::println)
+.thenApply(Main::parse)
 .join();
     
+}
+public static String parse(String responseBody){
+    JSONArray albums = new JSONArray(responseBody);
+    StringBuilder result = new StringBuilder();
+    for(int i=0;i < albums.length();i++)
+    {
+        JSONObject album = albums.getJSONObject(i);
+        int id = album.getInt("id");
+        int userId = album.getInt("userId");
+        String title = album.getString("title");
+        String albuminfo = id+" "+userId+" "+title;
+        System.out.println(albuminfo);
+        result.append(albuminfo).append("\n");
+    }
+    return result.toString();
 }
 }
